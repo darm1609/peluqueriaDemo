@@ -6,15 +6,15 @@
 	<meta name="description" content="">
 	<meta name="Keywords" content="">
 	<meta name="author" content="Daniel Rodriguez">
-	<meta name="title" content="Dulce Vanidad">
-	<title>Dulce Vanidad</title>
+	<meta name="title" content="Salon de belleza">
+	<title>Salon de belleza</title>
 	
 	<script type="text/javascript" src="js/validaciones.js"></script>
 	<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="CryptoJS v3.1.2/rollups/sha3.js"></script>
 	<!--Ejemplo SHA3-->
 	<script type="text/javascript">
-		//var hash = CryptoJS.SHA3("vinka2000");
+		//var hash = CryptoJS.SHA3("admin");
 		//alert(hash);
 	</script>
 	<!--Fin Ejemplo SHA3-->
