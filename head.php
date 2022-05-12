@@ -60,9 +60,8 @@
         }
     </script>
     
-</head>
-<!--class="w3-light-grey"--> 
-<body class="background-color">
+</head> 
+<body class="w3-light-grey">
 <?php
 	
 ?>
