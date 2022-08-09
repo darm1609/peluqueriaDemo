@@ -119,6 +119,43 @@
 		return money_format('%.2n', $val);
 	}
 
+	function Fecha($val, $bd)
+	{
+		return $val;
+	}
+
+	function usuario_empleado()
+	{
+		global $servidor, $puerto, $usuario, $pass, $basedatos;
+		$bd=new BaseDatos($servidor,$puerto,$usuario,$pass,$basedatos);
+		if($bd->conectado)
+		{
+			$sql="SELECT empleado FROM usuario WHERE empleado_telf='".$_SESSION["login"]."';";
+			$result = $bd->mysql->query($sql);
+			if ($result)
+			{
+				$empleado = $result->fetch_all(MYSQLI_ASSOC);
+				$result->free();
+				if (count($empleado))
+				{
+					if ($empleado[0]["empleado"] == 1)
+					{
+						unset($empleado);
+						return true;
+					}
+					else
+					{
+						unset($empleado);
+						return false;
+					}
+				}
+			}
+			else
+				unset($result);
+		}
+		return false;
+	}
+
 	function usuario_admin()
 	{
 		global $servidor, $puerto, $usuario, $pass, $basedatos;
@@ -131,16 +168,15 @@
 			{
 				$admin = $result->fetch_all(MYSQLI_ASSOC);
 				$result->free();
-				if ($admin[0]["administrador"] == 1)
-				{
-					unset($admin);
-					return true;
+				if (count($admin)) {
+					if ($admin[0]["administrador"] == 1)
+					{
+						unset($admin);
+						return true;
+					}
 				}
-				else
-				{
-					unset($admin);
-					return false;
-				}
+				unset($admin);
+				return false;
 			}
 			else
 				unset($result);
@@ -160,16 +196,16 @@
 			{
 				$admin = $result->fetch_all(MYSQLI_ASSOC);
 				$result->free();
-				if ($admin[0]["consulta"] == 1)
+				if (count($admin))
 				{
-					unset($admin);
-					return true;
+					if ($admin[0]["consulta"] == 1)
+					{
+						unset($admin);
+						return true;
+					}
 				}
-				else
-				{
-					unset($admin);
-					return false;
-				}
+				unset($admin);
+				return false;
 			}
 			else
 				unset($result);
@@ -189,16 +225,16 @@
 			{
 				$admin = $result->fetch_all(MYSQLI_ASSOC);
 				$result->free();
-				if ($admin[0]["cajero"] == 1)
+				if (count($admin))
 				{
-					unset($admin);
-					return true;
+					if ($admin[0]["cajero"] == 1)
+					{
+						unset($admin);
+						return true;
+					}
 				}
-				else
-				{
-					unset($admin);
-					return false;
-				}
+				unset($admin);
+				return false;
 			}
 			else
 				unset($result);

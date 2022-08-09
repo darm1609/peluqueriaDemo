@@ -774,6 +774,7 @@
         $total_ganancia_dueño_efectivo = 0;
         $total_ganancia_dueño_datafono = 0;
         $total_ganancia_dueño_transferencia = 0;
+        $total_ganancia_dueño_deuda = 0;
         $total_ganancia_dueño = 0;
 
         $total_ganancia_dueño_por_trabajo_efectivo = 0;
@@ -823,22 +824,28 @@
                                     ($row["transferencia_monto"] ? $row["transferencia_monto"] : 0);
 
                 $porcentaje_peluqueria = porcentaje_peluqueria($array_porcentajes, $array_porcentajes_motivo, $row["fecha_num"], $row["empleado_telf"], $row["id_motivo_ingreso"]);
-
+            
+                if ($row["cliente_especial"] != 1) {
                 $total_ganancia_peluqueria_efectivo += (($row["efectivo_monto"] ? $row["efectivo_monto"] : 0) * $porcentaje_peluqueria) / 100;
                 $total_ganancia_peluqueria_datafono += (($row["debito_monto"] ? $row["debito_monto"] : 0) * $porcentaje_peluqueria) / 100;
                 $total_ganancia_peluqueria_transferencia += (($row["transferencia_monto"] ? $row["transferencia_monto"] : 0) * $porcentaje_peluqueria) / 100;
                 $total_ganancia_peluqueria += ((($row["efectivo_monto"] ? $row["efectivo_monto"] : 0) * $porcentaje_peluqueria) / 100) + 
                                     ((($row["debito_monto"] ? $row["debito_monto"] : 0) * $porcentaje_peluqueria) / 100) + 
                                     ((($row["transferencia_monto"] ? $row["transferencia_monto"] : 0) * $porcentaje_peluqueria) / 100);
+                }
 
                 $porcentaje_dueño = porcentaje_dueño_por_empleado($array_porcentajes, $array_porcentajes_motivo, $row["fecha_num"], $row["empleado_telf"], $row["id_motivo_ingreso"]);
 
-                $total_ganancia_dueño_efectivo += (($row["efectivo_monto"] ? $row["efectivo_monto"] : 0) * $porcentaje_dueño) / 100;
-                $total_ganancia_dueño_datafono += (($row["debito_monto"] ? $row["debito_monto"] : 0) * $porcentaje_dueño) / 100;
-                $total_ganancia_dueño_transferencia += (($row["transferencia_monto"] ? $row["transferencia_monto"] : 0) * $porcentaje_dueño) / 100;
-                $total_ganancia_dueño += ((($row["efectivo_monto"] ? $row["efectivo_monto"] : 0) * $porcentaje_dueño) / 100) + 
-                                    ((($row["debito_monto"] ? $row["debito_monto"] : 0) * $porcentaje_dueño) / 100) + 
-                                    ((($row["transferencia_monto"] ? $row["transferencia_monto"] : 0) * $porcentaje_dueño) / 100);
+                if ($row["cliente_especial"] != 1) {
+                    $total_ganancia_dueño_efectivo += (($row["efectivo_monto"] ? $row["efectivo_monto"] : 0) * $porcentaje_dueño) / 100;
+                    $total_ganancia_dueño_datafono += (($row["debito_monto"] ? $row["debito_monto"] : 0) * $porcentaje_dueño) / 100;
+                    $total_ganancia_dueño_transferencia += (($row["transferencia_monto"] ? $row["transferencia_monto"] : 0) * $porcentaje_dueño) / 100;
+                    $total_ganancia_dueño_deuda += (($row["deuda_monto"] ? $row["deuda_monto"] : 0) * $porcentaje_dueño) / 100;
+                    $total_ganancia_dueño += ((($row["efectivo_monto"] ? $row["efectivo_monto"] : 0) * $porcentaje_dueño) / 100) + 
+                                        ((($row["debito_monto"] ? $row["debito_monto"] : 0) * $porcentaje_dueño) / 100) + 
+                                        ((($row["transferencia_monto"] ? $row["transferencia_monto"] : 0) * $porcentaje_dueño) / 100) +
+                                        ((($row["deuda_monto"] ? $row["deuda_monto"] : 0) * $porcentaje_dueño) / 100);
+                }
 
                 if ($row["dueño"] == 1 and $row["empleado_telf"] == '3226773809') {
                     $porcentaje_empleado_dueño = porcentaje_empleado($array_porcentajes, $array_porcentajes_motivo, $row["fecha_num"], $row["empleado_telf"], $row["id_motivo_ingreso"]);
@@ -1415,7 +1422,8 @@
                             $por_pago_de_deuda_encontrado = 0;
                             foreach($array_ingresos as $row)
                             {
-                                if ($row["fecha_num"] >= $fecha_num_consulta_desde and $row["fecha_num"] <= $fecha_num_consulta_hasta and $row["deuda"] != 1) 
+                                if ($row["fecha_num"] >= $fecha_num_consulta_desde and $row["fecha_num"] <= $fecha_num_consulta_hasta /*and $row["deuda"] != 1*/
+                                and ($row["efectivo_monto"] || $row["transferencia_monto"] || $row["debito_monto"])) 
                                 {
                                     $total_ingreso_del_dia += $row["efectivo_monto"] ? $row["efectivo_monto"] : 0;
                                     $total_ingreso_del_dia += $row["transferencia_monto"] ? $row["transferencia_monto"] : 0;
@@ -1812,6 +1820,7 @@
                     $resultado[$i]["fecha"] = $row["fecha"];
                     $resultado[$i]["tipo"] = "ingreso";
                     $resultado[$i]["motivo"] = $row["motivo"];
+                    $resultado[$i]["deuda"] = $row["deuda"];
                     $resultado[$i]["efectivo_monto"] = !empty($row["efectivo_monto"]) ? $row["efectivo_monto"] : 0;
                     $resultado[$i]["debito_monto"] = !empty($row["debito_monto"]) ? $row["debito_monto"] : 0;
                     $resultado[$i]["deuda_monto"] = !empty($row["deuda_monto"]) ? $row["deuda_monto"] : 0;
@@ -1875,7 +1884,7 @@
                         if ($row2["fecha"] == $row["fecha"])
                         {
                             echo "<tr>";
-                            if ($row2["tipo"] == "ingreso" and $row2["por_pago_de_deuda"] != 1 and $row2["cliente_especial"] != 1 /*and $empleado_telf != $row2["empleado_telf"]*/) 
+                            if ($row2["tipo"] == "ingreso" and $row2["por_pago_de_deuda"] != 1 and $row2["cliente_especial"] != 1 /*and $row2["deuda"] != 1 and $empleado_telf != $row2["empleado_telf"]*/) 
                             {
                                 echo "<td class='table-celda-texto'>".$row2["empleado"]."</td>";
                                 echo "<td class='table-celda-texto'>".$row2["motivo"]."</td>";
