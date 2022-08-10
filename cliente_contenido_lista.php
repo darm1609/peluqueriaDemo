@@ -288,7 +288,7 @@
 						<input class="w3-input w3-border" id="mcorreo" name="mcorreo" type="text" placeholder="Correo" maxlength="255" tabindex="5" value="<?php echo $row[0]['correo']; ?>">
 					</div>
 				</div>
-				<div class="w3-row w3-section">
+				<!-- <div class="w3-row w3-section">
 					<label>
 						<div class="w3-col" style="width:50px">
 							<?php
@@ -303,7 +303,7 @@
 							Especial
 						</div>
 					</label>
-				</div>
+				</div> -->
 				<div class="w3-row w3-section">
 					<div class="w3-col" style="width:300px"><label for="">
 						<?php

@@ -451,14 +451,14 @@
 					<input class="w3-input w3-border" id="correo" name="correo" type="text" placeholder="Correo" maxlength="255" tabindex="5">
 				</div>
 			</div>
-			<div class="w3-row w3-section">
+			<!-- <div class="w3-row w3-section">
 				<label>
 					<div class="w3-col" style="width:50px"><input class="w3-check" type="checkbox" id="especial" name="especial" value="1"></div>
 					<div class="w3-rest">	
 						Especial
 					</div>
 				</label>
-			</div>
+			</div> -->
 			<div class="w3-row w3-section">
 				<input type="button" class="w3-button w3-block w3-green" onclick="submit_cliente();" value="Guardar">
 			</div>
